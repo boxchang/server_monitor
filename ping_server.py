@@ -6,10 +6,12 @@ from lineNotifyMessage import lineNotifyMessage
 
 
 def main():
-    bpm_server = check_server_factory('BPM Server', '10.77.9.103', '8086')
-    bpm_server.check()
-    erp_server = check_server_factory('BPM Server', '10.77.9.101', '80')
-    erp_server.check()
+    erp_uat_server = check_server_factory('ERP UAT Server', '10.77.9.101', '80')
+    erp_uat_server.check()
+    bpm_uat_server = check_server_factory('BPM UAT Server', '10.77.9.103', '8086')
+    bpm_uat_server.check()
+    crt_uat_server = check_server_factory('Crystal Report UAT Server', '10.77.9.105', '80')
+    crt_uat_server.check()
 
 
 def send_line_message(server, host, port):

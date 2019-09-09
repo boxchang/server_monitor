@@ -8,27 +8,33 @@ from lineNotifyMessage import lineNotifyMessage
 def main():
     # TIPTOP UAT
     erp_uat_server = check_server_factory('ERP UAT Server', '10.77.9.101', '80')
-    erp_uat_server.check()
-    erp_uat_server = check_server_factory('ERP UAT Server', '210.4.114.243', '18181')
-    erp_uat_server.check()
+    result = erp_uat_server.check()
+
     erp_uat_server = check_server_factory('ERP UAT Server', '122.55.40.243', '18181')
-    erp_uat_server.check()
+    result = erp_uat_server.check()
+    if not result:
+        erp_uat_server = check_server_factory('ERP UAT Server', '210.4.114.243', '18181')
+        erp_uat_server.check()
 
     # BPM UAT
     bpm_uat_server = check_server_factory('BPM UAT Server', '10.77.9.103', '8086')
-    bpm_uat_server.check()
-    bpm_uat_server = check_server_factory('BPM UAT Server', '210.4.114.243', '18183')
-    bpm_uat_server.check()
+    result = bpm_uat_server.check()
+
     bpm_uat_server = check_server_factory('BPM UAT Server', '122.55.40.243', '18183')
-    bpm_uat_server.check()
+    result = bpm_uat_server.check()
+    if not result:
+        bpm_uat_server = check_server_factory('BPM UAT Server', '210.4.114.243', '18183')
+        bpm_uat_server.check()
 
     # Crystal Report UAT
     crt_uat_server = check_server_factory('Crystal Report UAT Server', '10.77.9.105', '80')
-    crt_uat_server.check()
-    crt_uat_server = check_server_factory('Crystal Report UAT Server', '210.4.114.243', '18184')
-    crt_uat_server.check()
+    result = crt_uat_server.check()
+
     crt_uat_server = check_server_factory('Crystal Report UAT Server', '122.55.40.243', '18184')
-    crt_uat_server.check()
+    result = crt_uat_server.check()
+    if not result:
+        crt_uat_server = check_server_factory('Crystal Report UAT Server', '210.4.114.243', '18184')
+        crt_uat_server.check()
 
 
 def send_line_message(server, host, port):
@@ -54,6 +60,9 @@ class check_server_factory():
         for port in port_list:
             if not check_socket(self.host, int(port)):
                 send_line_message(self.server, self.host, port)
+                return False
+            else:
+                return True
 
 
 def check_socket(host, port):

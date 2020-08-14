@@ -1,7 +1,8 @@
+import win32net
 import datetime
 import os
 import time
-import win32net
+
 
 from lineNotifyMessage import lineNotifyMessage
 
@@ -25,8 +26,8 @@ def Check_Mapping_Network_Driver_File(word):
         #Method_of_Do_Something(NetDriver + x)  # 這裡就拿到對應的路徑而且也把檔案都列出來的說
         if x.find(word) > 0:
             return True
-        else:
-            return False
+
+    return False
 
     try:
         win32net.NetUseDel(None, data['local'], 0)

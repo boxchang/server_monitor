@@ -68,5 +68,5 @@ class BPM(object):
 
 
 bpm = BPM()
-bpm.Check_DB_File()
+#bpm.Check_DB_File()
 bpm.Check_flow_status()

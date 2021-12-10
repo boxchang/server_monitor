@@ -17,10 +17,16 @@ class BPM(object):
             'DRIVER={SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
         cursor = cnxn.cursor()
 
-        sql = """SELECT a.processInstanceName,c.workItemName,c.createdTime FROM ProcessInstance a,WorkStep b,WorkItem c WHERE a.contextOID = b.contextOID
+        sql = """SELECT distinct a.processInstanceName,c.workItemName,c.createdTime,c.completedTime,c.currentState FROM ProcessInstance a,WorkStep b,WorkItem c WHERE a.contextOID = b.contextOID
         AND a.contextOID = c.contextOID
         AND c.completedTime IS NULL
-        AND c.currentState=2 AND b.currentState = 0"""
+        AND c.currentState = 2
+		  AND b.currentState = 0
+UNION 
+SELECT distinct a.processInstanceName,c.workItemName,c.createdTime,c.completedTime,c.currentState FROM ProcessInstance a,WorkStep b,WorkItem c WHERE a.contextOID = b.contextOID
+        AND a.contextOID = c.contextOID
+        AND c.completedTime IS NULL
+        AND workItemName = '動態加簽'"""
         cursor.execute(sql)
 
         for row in cursor.fetchall():

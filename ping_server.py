@@ -7,9 +7,9 @@ from lineNotifyMessage import lineNotifyMessage
 
 
 def main():
-    erp_server1 = check_server_factory('ERP Server', '10.77.9.1', '80', 'ERP八○')
-    bpm_server1 = check_server_factory('BPM Server', '10.77.9.3', '8086', 'BPM八○八六')
-    crt_server1 = check_server_factory('Crystal Report Server', '10.77.9.2', '80', 'CRT八○')
+    erp_server1 = check_server_factory('ERP Server', '10.77.9.1', '80', 'ERP')
+    bpm_server1 = check_server_factory('BPM Server', '10.77.9.3', '8086', 'BPM')
+    crt_server1 = check_server_factory('Crystal Report Server', '10.77.9.2', '80', 'CRT')
 
     print("Start Monitor")
     while(True):

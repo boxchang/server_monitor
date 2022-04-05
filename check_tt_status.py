@@ -46,7 +46,7 @@ class Param(object):
         COM_LIST = self.getTTComSchema()
         for doc in doc_list:
             schema = COM_LIST[doc[self.DOCNO_COLUMN][6:9]]
-            sql = """select * from {SCHEMA}.{TT_TABLE} where {DOCNO_COLUMN}='{DOCNO}' and {TT_STATUS_COLUMN} <>'S'"""
+            sql = """select * from {SCHEMA}.{TT_TABLE} where {DOCNO_COLUMN}='{DOCNO}' and {TT_STATUS_COLUMN} ='S'"""
             sql = sql.format(SCHEMA=schema, TT_TABLE=setting['TT_TABLE'],
                              DOCNO_COLUMN=setting['DOCNO_COLUMN'],
                              DOCNO=doc[setting["DOCNO_COLUMN"]],
@@ -55,9 +55,9 @@ class Param(object):
             cursor = db.execute_select_sql(sql)
             results = Cursor2Dict(cursor)
             if len(results) > 0:
-                msg = '[TEST]單號{DOCNO}，BPM已簽核完成，TT狀態尚未確認'.format(DOCNO=doc[setting["DOCNO_COLUMN"]])
+                msg = '單號{DOCNO}，BPM已簽核完成，TT狀態尚未確認'.format(DOCNO=doc[setting["DOCNO_COLUMN"]])
                 print(msg)
-                lineNotifyMessage(bpm_group_token, msg)
+                lineNotifyMessage(eteam_group_token, msg)
 
     def getBPM_Data(self):
         db = bpm_database(PROD_FLAG)

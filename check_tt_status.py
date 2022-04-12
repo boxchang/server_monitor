@@ -55,9 +55,10 @@ class Param(object):
             cursor = db.execute_select_sql(sql)
             results = Cursor2Dict(cursor)
             if len(results) > 0:
-                msg = '單號{DOCNO}，BPM已簽核完成，TT狀態尚未確認'.format(DOCNO=doc[setting["DOCNO_COLUMN"]])
-                print(msg)
-                lineNotifyMessage(eteam_group_token, msg)
+                if not self.isVoucher_Processing(doc[setting["DOCNO_COLUMN"]]):
+                    msg = '單號{DOCNO}，BPM已簽核完成，TT狀態尚未確認'.format(DOCNO=doc[setting["DOCNO_COLUMN"]])
+                    print(msg)
+                    lineNotifyMessage(eteam_group_token, msg)
 
     def getBPM_Data(self):
         db = bpm_database(PROD_FLAG)
@@ -69,6 +70,18 @@ class Param(object):
         cursor = db.execute_select_sql(sql)
         results = Cursor2Dict(cursor)
         return results
+
+    # 發生簽核完成取消確認重新送簽
+    def isVoucher_Processing(self, doc_no):
+        result = True
+        db = bpm_database(PROD_FLAG)
+        sql = """select * from ProcessInstance p where p.subject like '%{doc_no}%' and currentState = 1"""
+        sql = sql.format(doc_no=doc_no)
+        cursor = db.execute_select_sql(sql)
+        results = Cursor2Dict(cursor)
+        if len(results) == 0:
+            result = False
+        return result
 
     def getTTComSchema(self):
         results = {}

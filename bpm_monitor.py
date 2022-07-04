@@ -17,23 +17,24 @@ class BPM(object):
             'DRIVER={SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password)
         cursor = cnxn.cursor()
 
-        sql = """SELECT distinct a.processInstanceName,c.workItemName,c.createdTime,c.completedTime,c.currentState FROM ProcessInstance a,WorkStep b,WorkItem c WHERE a.contextOID = b.contextOID
+        sql = """select A.processInstanceName,A.workItemName,A.createdTime,B.subject,A.completedTime,A.currentState,A.serialNumber from (
+SELECT distinct a.processInstanceName,c.workItemName,c.createdTime,c.completedTime,c.currentState,a.serialNumber FROM ProcessInstance a,WorkStep b,WorkItem c WHERE a.contextOID = b.contextOID
         AND a.contextOID = c.contextOID
         AND c.completedTime IS NULL
         AND c.currentState = 2
-		  AND b.currentState = 0
+		  AND b.currentState = 0 AND a.processInstanceName not in ('Fixed Asset Transfer(afat102)')
 UNION 
-SELECT distinct a.processInstanceName,c.workItemName,c.createdTime,c.completedTime,c.currentState FROM ProcessInstance a,WorkStep b,WorkItem c WHERE a.contextOID = b.contextOID
+SELECT distinct a.processInstanceName,c.workItemName,c.createdTime,c.completedTime,c.currentState,a.serialNumber FROM ProcessInstance a,WorkStep b,WorkItem c WHERE a.contextOID = b.contextOID
         AND a.contextOID = c.contextOID
         AND c.completedTime IS NULL
-        AND workItemName = '動態加簽'"""
+        AND workItemName = '動態加簽') A, ProcessInstance B where A.serialNumber = B.serialNumber"""
         cursor.execute(sql)
 
         for row in cursor.fetchall():
-            print(row[0] + " " + row[1] + " " + str(row[2]) + "單據卡住")
-
             # 修改為你要傳送的訊息內容
-            message = row[0] + " " + row[1] + " " + str(row[2]) + "單據卡住"
+            message = """{doc_type} {activity} {approve_time}單據卡住\nSubject:{subject}"""
+            message = message.format(doc_type=row[0], activity=row[1], approve_time=row[2], subject=row[3])
+            print(message)
             lineNotifyMessage(self.token, message)
 
 

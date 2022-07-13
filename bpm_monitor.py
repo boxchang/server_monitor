@@ -8,6 +8,7 @@ class BPM(object):
     token = 'kB5Gh2KDGLi8Te6nGgXYxXh5qoIlVLjepkQbi5sEVIS'
 
     def Check_flow_status(self):
+        tonow = datetime.datetime.now()
 
         server = 'tcp:10.77.9.4'
         database = 'EFGP'
@@ -22,7 +23,7 @@ SELECT distinct a.processInstanceName,c.workItemName,c.createdTime,c.completedTi
         AND a.contextOID = c.contextOID
         AND c.completedTime IS NULL
         AND c.currentState = 2
-		  AND b.currentState = 0 AND a.processInstanceName not in ('Fixed Asset Transfer(afat102)')
+		  AND b.currentState = 0
 UNION 
 SELECT distinct a.processInstanceName,c.workItemName,c.createdTime,c.completedTime,c.currentState,a.serialNumber FROM ProcessInstance a,WorkStep b,WorkItem c WHERE a.contextOID = b.contextOID
         AND a.contextOID = c.contextOID
@@ -31,6 +32,9 @@ SELECT distinct a.processInstanceName,c.workItemName,c.createdTime,c.completedTi
         cursor.execute(sql)
 
         for row in cursor.fetchall():
+            if row[0] == "Fixed Asset Transfer(afat102)" and tonow.day < 15:
+                continue
+
             # 修改為你要傳送的訊息內容
             message = """{doc_type} {activity} {approve_time}單據卡住\nSubject:{subject}"""
             message = message.format(doc_type=row[0], activity=row[1], approve_time=row[2], subject=row[3])

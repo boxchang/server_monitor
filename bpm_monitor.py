@@ -32,7 +32,7 @@ SELECT distinct a.processInstanceName,c.workItemName,c.createdTime,c.completedTi
         cursor.execute(sql)
 
         for row in cursor.fetchall():
-            if row[0] == "Fixed Asset Transfer(afat102)" and tonow.day < 15:
+            if row[0] == "Fixed Asset Transfer(afat102)" and (tonow.day < 15 or tonow.day > 25):
                 continue
 
             # 修改為你要傳送的訊息內容

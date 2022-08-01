@@ -1,7 +1,7 @@
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from_address = "erp@mail.bbiclark.com"
+from_address = "e_bpm@mail.bbiclark.com"
 to_address = "box_chang@mail.bbiclark.com"
 # Create message container - the correct MIME type is multipart/alternative.
 msg = MIMEMultipart('alternative')
@@ -17,8 +17,8 @@ part1 = MIMEText(html, 'html')
 # Attach parts into message container
 msg.attach(part1)
 # Credentials
-username = 'erp@mail.bbiclark.com'
-password = 'P@ssw0rd'
+username = 'e_bpm@mail.bbiclark.com'
+password = 'jiqrmzmavhqbxtzs'
 # Sending the email
 ## note - this smtp config worked for me, I found it googling around, you may have to tweak the # (587) to get yours to work
 server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
